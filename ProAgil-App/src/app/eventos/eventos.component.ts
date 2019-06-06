@@ -5,7 +5,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { defineLocale, BsLocaleService, ptBrLocale } from 'ngx-bootstrap';
 import { templateJitUrl } from '@angular/compiler';
-import { Template } from '@angular/compiler/src/render3/r3_ast';
+import { ToastrService } from 'ngx-toastr';
 defineLocale('pt-br', ptBrLocale);
 
 @Component({
@@ -15,6 +15,7 @@ defineLocale('pt-br', ptBrLocale);
 })
 export class EventosComponent implements OnInit {
 
+  titulo = 'Eventos';
   eventosFiltrados: Evento[];
   eventos: Evento[];
   evento: Evento;
@@ -32,6 +33,7 @@ export class EventosComponent implements OnInit {
     , private modalService: BsModalService
     , private fb: FormBuilder
     , private localeService: BsLocaleService
+    , private toastr: ToastrService
     ) {
       this.localeService.use('pt-br');
      }
@@ -64,8 +66,10 @@ export class EventosComponent implements OnInit {
       () => {
           template.hide();
           this.getEventos();
+          this.toastr.success('Deletado com sucesso');
         }, error => {
           console.log(error);
+          this.toastr.error('Falha ao deletar');
         }
     );
   }
@@ -116,8 +120,10 @@ export class EventosComponent implements OnInit {
               console.log(novoEvento);
               template.hide();
               this.getEventos();
+              this.toastr.success('Inserido com sucesso');
             }, error => {
               console.log(error);
+              this.toastr.error('Falha ao inserir');
             }
           );
         } else {
@@ -127,8 +133,10 @@ export class EventosComponent implements OnInit {
               console.log(novoEvento);
               template.hide();
               this.getEventos();
+              this.toastr.success('Editado com sucesso');
             }, error => {
               console.log(error);
+              this.toastr.error('Falha ao editar');
             }
           );
         }
@@ -141,7 +149,7 @@ export class EventosComponent implements OnInit {
           this.eventos = eventos;
           this.eventosFiltrados = this.eventos;
         }, error => {
-          console.log(error);
+          this.toastr.error('Falha ao tentar carregar eventos');
         }
         );
       }
